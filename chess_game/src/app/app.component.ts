@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 
 const displayPieces : Record<string,string>= {
-  'blackpawn':'',
-  'blackrook':'',
-  'blackking':'',
-  'blackqueen':'',
-  'blackknight':'',
-  'whitepawn':'',
-  'whiterook':'',
-  'whiteking':'',
-  'whitequeen':'',
-  'whiteknight':'',
+  'blackpawn':'♟︎',
+  'blackrook':'♜',
+  'blackking':'♚',
+  'blackqueen':'♛',
+  'blackknight':'♞',
+  'whitepawn':'♙',
+  'whiterook':'♖',
+  'whiteking':'♔',
+  'whitequeen':'♕',
+  'whiteknight':'♘',
 }
 
 interface Piece {
@@ -34,7 +34,18 @@ export class AppComponent {
 
   displayPiece(row:number,col:number):string{
     const p = this.board[row][col].piece;
-    return p? displayPieces[`${p.color}${p.id}`]:'';
+    return p? displayPieces[`${p.color}${p.type}`]:'';
+  }
+
+  validMove(oldRow:number,oldCol:number,newRow:number,newCol:number): boolean {
+    const piece = this.board[oldRow][oldCol].piece;
+    
+    switch(piece?.type){
+      case 'pawn':
+        const moveDirection = piece.color == 'white' ? 1: -1;
+        return newRow == oldRow + moveDirection && newCol == oldCol;
+      default: return false;
+    }
   }
 }
 
@@ -82,14 +93,14 @@ function getStartingPiece(row:number,col:number,board:Cell[][]){
 
 function pawn(board:Cell[][],color:'white' | 'black'):Piece {
   return{
-    id:'pawn',
+    type:'pawn',
     color,
   };
 }
 
 function queen(board:Cell[][],color:'white' | 'black'):Piece{
   return{
-    id:'queen',
+    type:'queen',
     color,
   };
 }
@@ -97,28 +108,28 @@ function queen(board:Cell[][],color:'white' | 'black'):Piece{
 
 function king(board:Cell[][],color:'white' | 'black'):Piece{
   return{
-    id:'king',
+    type:'king',
     color,
   };
 }
 
 function rook(board:Cell[][],color:'white' | 'black'):Piece{
   return{
-    id:'rook',
+    type:'rook',
     color,
   };
 }
 
 function bishop(board:Cell[][],color:'white' | 'black'):Piece{
   return{
-    id:'bishop',
+    type:'bishop',
     color,
   };
 }
 
 function knight(board:Cell[][],color:'white' | 'black'):Piece{
   return{
-    id:'knight',
+    type:'knight',
     color,
   };
 }
